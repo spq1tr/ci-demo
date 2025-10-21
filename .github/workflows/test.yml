@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       action:
+        type: choice
         description: 'Action to run'
         required: true
         default: 'plan'
@@ -27,7 +28,9 @@ jobs:
   apply:
     needs: plan
     if: >
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply')
+      github.event_name == 'workflow_dispatch' 
+      && github.event.inputs.action == 'apply'
+      && (github.ref == 'refs/heads/main' || github.base_ref == 'main')
     runs-on:
     - ubuntu-latest
 
